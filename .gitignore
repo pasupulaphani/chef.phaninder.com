@@ -7,6 +7,9 @@
 .rvmrc
 .rbenv-version
 
+# Vagrant
+.vagrant
+
 # Emacs
 *~
 \#*\#
