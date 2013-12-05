@@ -1,5 +1,5 @@
 name "webserver"
-description "proxy server for my app"
+description "reverse proxy for my app"
 run_list "recipe[nginx]"
 override_attributes({
   :nginx => {
