@@ -5,6 +5,7 @@ override_attributes({
   :nginx => {
   	:version => "1.4.4",
   	:repo_source => "nginx",
-    :status => { :port => "8090" }
+    :status => { :port => "8090" },
+    :default_site_enabled => false
   }
 })

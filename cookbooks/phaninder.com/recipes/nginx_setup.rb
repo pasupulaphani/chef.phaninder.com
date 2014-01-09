@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: nginx_setup
-# Recipe:: default
+# Cookbook Name:: phaninder.com
+# Recipe:: nginx_setup
 #
 # Copyright 2013, phaninder.com
 #
@@ -17,4 +17,21 @@
 # limitations under the License.
 #
 
-include_recipe "phaninder.com::nginx_setup"
+template "/etc/nginx/sites-available/#{node[:myblog][:name]}" do
+	source "#{node[:myblog][:name]}.erb"
+	owner "root"
+	group "root"
+	mode 00644
+	notifies :restart, 'service[nginx]'
+end
+
+link "/etc/nginx/sites-enabled/#{node[:myblog][:name]}" do
+  filename = "/etc/nginx/sites-available/#{node[:myblog][:name]}"
+  to filename
+  only_if { File.exists? filename }
+end
+
+service "nginx" do
+	supports :restart => true, :status => true
+	action [:enable, :start]
+end

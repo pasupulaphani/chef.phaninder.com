@@ -17,21 +17,5 @@
 # limitations under the License.
 #
 
-template "/etc/nginx/sites-available/#{node[:myblog][:name]}" do
-	source "#{node[:myblog][:name]}.erb"
-	owner "root"
-	group "root"
-	mode 00644
-	notifies :restart, 'service[nginx]'
-end
-
-link "/etc/nginx/sites-enabled/#{node[:myblog][:name]}" do
-  filename = "/etc/nginx/sites-available/#{node[:myblog][:name]}"
-  to filename
-  only_if { File.exists? filename }
-end
-
-service "nginx" do
-	supports :restart => true, :status => true
-	action [:enable, :start]
-end
+include_recipe "phaninder.com::nginx_setup"
+include_recipe "phaninder.com::hostfile_setup"

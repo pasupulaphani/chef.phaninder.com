@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: phaninder.com
-# Recipe:: default
+# Recipe:: nginx_setup
 #
 # Copyright 2013, phaninder.com
 #
@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
-default[:myblog][:name]     = 'phaninder.com'
-default[:myblog][:hostname] = 'phaninder.com'
-default[:myblog][:aliases]  = ['www.phaninder.com']
+hostsfile_entry node['phaninder.com'][:A_record] do
+  hostname  node[:myblog][:hostname]
+  aliases   node[:myblog][:aliases]
+  action    :append
+end

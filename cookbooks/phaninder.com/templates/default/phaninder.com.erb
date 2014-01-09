@@ -8,7 +8,7 @@ server {
   # Domain names.
   # Make sure to set the A Record on your domain's DNS settings to your server's IP address.
   # You can test if was set properly by using the `dig` command: dig yourdomain.com
-  server_name phaninder.com www.phaninder.com;
+  server_name <%= node[:myblog][:hostname] %> <% node[:myblog][:aliases].each do |a| %> <%= a %> <% end %>;
  
   # Timeout for closing keep-alive connections.
   keepalive_timeout 10;
@@ -26,8 +26,8 @@ server {
   # client_max_body_size 16M;
  
   # Access and error log files.
-  access_log /var/log/nginx/phaninder.com/access.log;
-  error_log /var/log/nginx/phaninder.com/error.log;
+  access_log /var/log/nginx/phaninder.com-access.log;
+  error_log /var/log/nginx/phaninder.com-error.log;
  
   # Custom error page.
   # error_page 404 maintenance.html;
