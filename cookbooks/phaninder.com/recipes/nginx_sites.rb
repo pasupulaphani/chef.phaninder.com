@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: phaninder.com
-# Recipe:: default
+# Recipe:: nginx_sites
 #
 # Copyright 2013, phaninder.com
 #
@@ -17,8 +17,21 @@
 # limitations under the License.
 #
 
-default[:myblog][:name]     = 'phaninder.com'
-default[:myblog][:hostname] = 'phaninder.com'
-default[:myblog][:aliases]  = ['www.phaninder.com']
+template "/etc/nginx/sites-available/#{node[:myblog][:name]}" do
+	source "nginx_sites/#{node[:myblog][:name]}.erb"
+	owner "root"
+	group "root"
+	mode 00644
+	notifies :restart, 'service[nginx]'
+end
 
-default[:myblog][:static]  = 'static.phaninder.com'
+link "/etc/nginx/sites-enabled/#{node[:myblog][:name]}" do
+  filename = "/etc/nginx/sites-available/#{node[:myblog][:name]}"
+  to filename
+  only_if { File.exists? filename }
+end
+
+service "nginx" do
+	supports :restart => true, :status => true
+	action [:enable, :start]
+end

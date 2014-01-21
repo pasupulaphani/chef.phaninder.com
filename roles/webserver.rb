@@ -6,6 +6,7 @@ override_attributes({
   	:version => "1.4.4",
   	:repo_source => "nginx",
     :status => { :port => "8090" },
-    :default_site_enabled => false
+    :default_site_enabled => false,
+    :proxy_read_timeout => 150
   }
 })

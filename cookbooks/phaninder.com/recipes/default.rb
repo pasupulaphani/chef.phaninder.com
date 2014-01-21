@@ -17,5 +17,5 @@
 # limitations under the License.
 #
 
-include_recipe "phaninder.com::nginx_setup"
+include_recipe "phaninder.com::nginx_sites"
 include_recipe "phaninder.com::hostfile_setup"
