@@ -1,5 +1,7 @@
 chef_server repo for phaninder.com
 ===============
+(It has reached a stage where I've to move a lot my cookbooks to private repo for security reason)
+I still try to keep this public repo uptodate
 
 My chef server
 -------------------
