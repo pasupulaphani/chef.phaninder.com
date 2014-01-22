@@ -17,5 +17,13 @@
 # limitations under the License.
 #
 
+include_recipe "users"
+
+# Note this LWRP searches the users data bag for the "nginx" group attribute,
+# and adds those users to a Unix security group "nginx"
+users_manage "nginx" do
+	group_id 2300
+end
+
 include_recipe "phaninder.com::nginx_sites"
 include_recipe "phaninder.com::hostfile_setup"
