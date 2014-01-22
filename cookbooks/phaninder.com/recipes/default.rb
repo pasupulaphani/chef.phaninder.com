@@ -17,13 +17,15 @@
 # limitations under the License.
 #
 
-include_recipe "users"
+include_recipe "phaninder.com::static_setup"
+include_recipe "phaninder.com::proxy_setup"
+include_recipe "phaninder.com::hostfile_setup"
+
+
+include_recipe "users" # not req ; using deploy
 
 # Note this LWRP searches the users data bag for the "nginx" group attribute,
 # and adds those users to a Unix security group "nginx"
-users_manage "nginx" do
-	group_id 2300
-end
-
-include_recipe "phaninder.com::nginx_sites"
-include_recipe "phaninder.com::hostfile_setup"
+# users_manage "nginx" do
+# 	group_id 2300
+# end
