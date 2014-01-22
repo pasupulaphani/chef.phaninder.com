@@ -56,3 +56,6 @@ $RECYCLE.BIN/
 
 # no databags
 data_bags
+
+# sensitive data
+roles/deployment.rb
