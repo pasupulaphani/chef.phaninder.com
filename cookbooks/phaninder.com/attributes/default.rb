@@ -21,4 +21,12 @@ default[:myblog][:name]     = 'phaninder.com'
 default[:myblog][:hostname] = 'phaninder.com'
 default[:myblog][:aliases]  = ['www.phaninder.com']
 
+# statics you don't want to redirect or wnat to be under ur host
+# Files you usually want to find in your path/host
+# Reason we need to do this for the puropse of search engines
+# redirections gives bad results/ may fail identification of actual host
+# Files read by search engines : favicon.ico|robots.txt|humans.txt|phaninder.vcf
+default[:myblog][:static_proxy]  = ["favicon.ico", "robots.txt", "humans.txt", "phaninder.vcf"]
+
 default[:myblog][:static]  = 'static.phaninder.com'
+default[:myblog][:static_root]  = "/var/www/"

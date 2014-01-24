@@ -22,12 +22,20 @@ group "www-data" do
   append true
 end
 
-directory "/var/www/#{node[:myblog][:static]}" do
+directory "#{node[:myblog][:static_root]}/#{node[:myblog][:static]}" do
 	owner "nginx"
   group "www-data"
-  mode  0674
+  mode  00674
   action :create
   recursive true
+end
+
+bash "make_static_root_executable" do
+  user "root"
+  cwd node[:myblog][:static_root]
+  code <<-EOH
+    chmod a+x *
+  EOH
 end
 
 template "/etc/nginx/sites-available/#{node[:myblog][:static]}" do

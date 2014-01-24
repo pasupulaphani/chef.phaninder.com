@@ -22,3 +22,8 @@ hostsfile_entry node['phaninder.com'][:A_record] do
   aliases   node[:myblog][:aliases]
   action    :append
 end
+
+hostsfile_entry node['phaninder.com'][:A_record] do
+  hostname  node[:myblog][:static]
+  action    :append
+end
