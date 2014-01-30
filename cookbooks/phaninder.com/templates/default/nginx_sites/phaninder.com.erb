@@ -1,24 +1,27 @@
 # caching options
-proxy_cache_path  /var/cache levels=1:2 keys_zone=my-cache:8m max_size=1000m inactive=600m;
+proxy_cache_path  /var/cache/sites_nginx levels=1:2 keys_zone=my-cache:8m max_size=1000m inactive=600m;
 proxy_temp_path   /var/cache/tmp; 
+
+proxy_cache my-cache;
+proxy_cache_valid  200 302  60m;
+proxy_cache_valid  404      1m;
+# setting key doens not work for maintaince redirect
+#proxy_cache_key sfs$request_uri$scheme;
+proxy_redirect off;
+proxy_http_version 1.1;
+
+proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header Connection        "";
 
 server {
   listen 80;
   listen [::]:80 default_server ipv6only=on;
  
-  server_name <%= node[:myblog][:hostname] %> <% node[:myblog][:aliases].each do |a| %> <%= a %> <% end %>;
- 
   # Timeout for closing keep-alive connections.
   keepalive_timeout 10;
-  
-  # Enable gzip compression.
-  gzip on;
-  gzip_http_version 1.1;
-  gzip_vary on;
-  gzip_comp_level 6;
-  gzip_proxied any;
-  gzip_buffers 16 8k;
-  gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+
+  server_name <%= node[:myblog][:hostname] %> <% node[:myblog][:aliases].each do |a| %> <%= a %> <% end %>;
   
   # Max upload size.
   # client_max_body_size 16M;
@@ -26,14 +29,6 @@ server {
   # Access and error log files.
   access_log /var/log/nginx/<%= node[:myblog][:hostname] %>-access.log;
   error_log /var/log/nginx/<%= node[:myblog][:hostname] %>-error.log;
- 
-  # Custom error page.
-  # error_page 404 maintenance.html;
-  # error_page 500 502 503 504 maintenance.html;
-  
-  # location /maintenance.html {
-  #  root /var/www;
-  # }
 
   # The reason we have set up individual loactions is due to the fact
   # that proxy_pass cannot be used in location regex, if and few nginx control statements
@@ -45,22 +40,22 @@ server {
     }
   <% end %>
 
+  location /resume {
+    # Reverse proxy
+    proxy_pass http://resume.phaninder.com/;
+  }
+
   location / {
     # Reverse proxy
     proxy_pass http://phaninder.eu01.aws.af.cm/;
-    proxy_read_timeout 150;
-    proxy_redirect off;
-    proxy_http_version 1.1;
 
-    # Cache
-    proxy_cache my-cache;
-    proxy_cache_valid  200 302  60m;
-    proxy_cache_valid  404      1m;
-    proxy_cache_key sfs$request_uri$scheme;
+    # take care of errors
+    proxy_intercept_errors on;
+    error_page 500 502 504 403 404 =503 @maintenance;
+  }
 
-    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header Connection        "";
-
+  location @maintenance {
+    proxy_pass http://secondary.phaninder.com;
+    #rewrite ^/(.*) http://secondary.phaninder.com/$1 permanent;
   }
 }

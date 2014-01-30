@@ -17,21 +17,14 @@
 # limitations under the License.
 #
 
-template "/etc/nginx/sites-available/#{node[:myblog][:name]}" do
-	source "nginx_sites/#{node[:myblog][:name]}.erb"
-	owner "root"
-	group "root"
-	mode 00644
-	notifies :restart, 'service[nginx]'
+### set_site definition
+set_site node[:myblog][:name] do
+  enable true
 end
 
-link "/etc/nginx/sites-enabled/#{node[:myblog][:name]}" do
-  filename = "/etc/nginx/sites-available/#{node[:myblog][:name]}"
-  to filename
-  only_if { File.exists? filename }
-end
-
-service "nginx" do
-	supports :restart => true, :status => true
-	action [:enable, :start]
+### set /etc/hosts
+hostsfile_entry node['phaninder.com'][:A_record] do
+  hostname  node[:myblog][:hostname]
+  aliases   node[:myblog][:aliases]
+  action    :append
 end

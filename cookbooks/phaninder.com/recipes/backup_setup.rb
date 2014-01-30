@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: phaninder.com
-# Recipe:: nginx_setup
+# Recipe:: backup_setup
 #
 # Copyright 2013, phaninder.com
 #
@@ -17,13 +17,13 @@
 # limitations under the License.
 #
 
-hostsfile_entry node['phaninder.com'][:A_record] do
-  hostname  node[:myblog][:hostname]
-  aliases   node[:myblog][:aliases]
-  action    :append
+### set_site definition
+set_site node[:myblog][:backup] do
+  enable true
 end
 
+### set /etc/hosts
 hostsfile_entry node['phaninder.com'][:A_record] do
-  hostname  node[:myblog][:static]
+  hostname  node[:myblog][:backup]
   action    :append
 end

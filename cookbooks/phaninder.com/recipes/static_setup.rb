@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+### Static dir create and set permissions
 group "www-data" do
   members ["nginx", "deploy"]
   append true
@@ -38,21 +39,13 @@ bash "make_static_root_executable" do
   EOH
 end
 
-template "/etc/nginx/sites-available/#{node[:myblog][:static]}" do
-	source "nginx_sites/#{node[:myblog][:static]}.erb"
-	owner "root"
-	group "root"
-	mode 00644
-	notifies :restart, 'service[nginx]'
+### set_site definition
+set_site node[:myblog][:static] do
+  enable true
 end
 
-link "/etc/nginx/sites-enabled/#{node[:myblog][:static]}" do
-  filename = "/etc/nginx/sites-available/#{node[:myblog][:static]}"
-  to filename
-  only_if { File.exists? filename }
-end
-
-service "nginx" do
-	supports :restart => true, :status => true
-	action [:enable, :start]
+### set /etc/hosts
+hostsfile_entry node['phaninder.com'][:A_record] do
+  hostname  node[:myblog][:static]
+  action    :append
 end

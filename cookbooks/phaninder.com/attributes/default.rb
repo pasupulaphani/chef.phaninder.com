@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+if !node['phaninder.com'][:A_record]
+	Chef::Application.fatal!("no A record is specified cannot continue check env scripts", 42) 
+end
+
 default[:myblog][:name]     = 'phaninder.com'
 default[:myblog][:hostname] = 'phaninder.com'
 default[:myblog][:aliases]  = ['www.phaninder.com']
@@ -30,3 +34,5 @@ default[:myblog][:static_proxy]  = ["favicon.ico", "robots.txt", "humans.txt", "
 
 default[:myblog][:static]  = 'static.phaninder.com'
 default[:myblog][:static_root]  = "/var/www/"
+
+default[:myblog][:backup]  = 'backup.phaninder.com'

@@ -1,0 +1,30 @@
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name <%= node[:myblog][:backup] %>;
+
+  # Max upload size.
+  # client_max_body_size 16M;
+ 
+  # Access and error log files.
+  access_log /var/log/nginx/<%= node[:myblog][:backup] %>-access.log;
+  error_log /var/log/nginx/<%= node[:myblog][:backup] %>-error.log;
+
+  location / {
+    # Reverse proxy
+    proxy_pass http://backup-phaninder.eu01.aws.af.cm/;
+  }
+
+  # Enable caching of static files.
+  location ~* \.(css|js|gif|jpe?g|png)$ {
+   expires 168h;
+   add_header Pragma public;
+   add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+  }
+
+  # Don't cache html files.
+  # location ~* \.html$ {
+  #  expires -1;
+  # }
+}

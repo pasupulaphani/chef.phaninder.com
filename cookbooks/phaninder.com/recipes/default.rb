@@ -19,7 +19,7 @@
 
 include_recipe "phaninder.com::static_setup"
 include_recipe "phaninder.com::proxy_setup"
-include_recipe "phaninder.com::hostfile_setup"
+include_recipe "phaninder.com::backup_setup"
 
 
 include_recipe "users" # not req ; using deploy
@@ -29,3 +29,13 @@ include_recipe "users" # not req ; using deploy
 # users_manage "nginx" do
 # 	group_id 2300
 # end
+
+# this is to tell nginx to render file types
+# if not they will be returned as files.
+cookbook_file "#{node['nginx']['dir']}/mime.types" do
+  source 'mime.types'
+  owner  'root'
+  group  'root'
+  mode   '0644'
+  notifies :reload, 'service[nginx]'
+end
