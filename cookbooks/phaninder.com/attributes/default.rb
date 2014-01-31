@@ -21,18 +21,32 @@ if !node['phaninder.com'][:A_record]
 	Chef::Application.fatal!("no A record is specified cannot continue check env scripts", 42) 
 end
 
-default[:myblog][:name]     = 'phaninder.com'
-default[:myblog][:hostname] = 'phaninder.com'
-default[:myblog][:aliases]  = ['www.phaninder.com']
+default[:myblog] = { 
+	:main  => {
+		:hostname    =>  'phaninder.com',
+		:aliases     =>  ['www.phaninder.com'],
+		:proxy_pass  =>  'http://phaninder.eu01.aws.af.cm/'
+	},
+	:secondary => {
+		:proxy_pass  =>  'http://secondary.phaninder.com'
+	},
+	:static => {
+		:hostname    =>  'static.phaninder.com',
+		:root_dir    =>  '/var/www/',
+		:proxy_pass  =>  'http://phaninder.eu01.aws.af.cm/'
+	},
+	:backup => {
+		:hostname    =>  'backup.phaninder.com',
+		:proxy_pass  =>  'http://backup-phaninder.eu01.aws.af.cm/'
+	},
+	:resume => {
+		:proxy_pass  =>  'http://resume.phaninder.com'
+	}
+}
 
 # statics you don't want to redirect or wnat to be under ur host
 # Files you usually want to find in your path/host
 # Reason we need to do this for the puropse of search engines
 # redirections gives bad results/ may fail identification of actual host
 # Files read by search engines : favicon.ico|robots.txt|humans.txt|phaninder.vcf
-default[:myblog][:static_proxy]  = ["favicon.ico", "robots.txt", "humans.txt", "phaninder.vcf"]
-
-default[:myblog][:static]  = 'static.phaninder.com'
-default[:myblog][:static_root]  = "/var/www/"
-
-default[:myblog][:backup]  = 'backup.phaninder.com'
+default[:myblog][:static_route_main]  = ["favicon.ico", "robots.txt", "humans.txt", "phaninder.vcf"]

@@ -5,7 +5,7 @@ proxy_temp_path   /var/cache/tmp;
 proxy_cache my-cache;
 proxy_cache_valid  200 302  60m;
 proxy_cache_valid  404      1m;
-# setting key doens not work for maintaince redirect
+# setting key doesn't not work for maintaince redirect
 #proxy_cache_key sfs$request_uri$scheme;
 proxy_redirect off;
 proxy_http_version 1.1;
@@ -21,20 +21,20 @@ server {
   # Timeout for closing keep-alive connections.
   keepalive_timeout 10;
 
-  server_name <%= node[:myblog][:hostname] %> <% node[:myblog][:aliases].each do |a| %> <%= a %> <% end %>;
+  server_name <%= node[:myblog][:main][:hostname] %> <% node[:myblog][:main][:aliases].each do |a| %> <%= a %> <% end %>;
   
   # Max upload size.
   # client_max_body_size 16M;
  
   # Access and error log files.
-  access_log /var/log/nginx/<%= node[:myblog][:hostname] %>-access.log;
-  error_log /var/log/nginx/<%= node[:myblog][:hostname] %>-error.log;
+  access_log /var/log/nginx/<%= node[:myblog][:main][:hostname] %>-access.log;
+  error_log /var/log/nginx/<%= node[:myblog][:main][:hostname] %>-error.log;
 
   # The reason we have set up individual loactions is due to the fact
   # that proxy_pass cannot be used in location regex, if and few nginx control statements
-  <% node[:myblog][:static_proxy].each do |file_name| %>
+  <% node[:myblog][:static_route_main].each do |file_name| %>
     location /<%= file_name %> {
-      proxy_pass http://<%= node[:myblog][:static] %>/<%= file_name %>;
+      proxy_pass http://<%= node[:myblog][:static][:hostname] %>/<%= file_name %>;
       access_log off;
       expires max;
     }
@@ -42,12 +42,12 @@ server {
 
   location /resume {
     # Reverse proxy
-    proxy_pass http://resume.phaninder.com/;
+    proxy_pass <%= node[:myblog][:resume][:proxy_pass] %>;
   }
 
   location / {
     # Reverse proxy
-    proxy_pass http://phaninder.eu01.aws.af.cm/;
+    proxy_pass <%= node[:myblog][:main][:proxy_pass] %>;
 
     # take care of errors
     proxy_intercept_errors on;
@@ -55,7 +55,7 @@ server {
   }
 
   location @maintenance {
-    proxy_pass http://secondary.phaninder.com;
+    proxy_pass <%= node[:myblog][:secondary][:proxy_pass] %>;
     #rewrite ^/(.*) http://secondary.phaninder.com/$1 permanent;
   }
 }

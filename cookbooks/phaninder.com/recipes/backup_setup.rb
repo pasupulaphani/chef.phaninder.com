@@ -18,12 +18,12 @@
 #
 
 ### set_site definition
-set_site node[:myblog][:backup] do
+set_site node[:myblog][:backup][:hostname] do
   enable true
 end
 
 ### set /etc/hosts
 hostsfile_entry node['phaninder.com'][:A_record] do
-  hostname  node[:myblog][:backup]
+  hostname  node[:myblog][:backup][:hostname]
   action    :append
 end

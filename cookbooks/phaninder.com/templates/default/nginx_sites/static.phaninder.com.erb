@@ -2,25 +2,29 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name <%= node[:myblog][:static] %>;
+  server_name <%= node[:myblog][:static][:hostname] %>;
   
   # Max upload size.
   # client_max_body_size 16M;
  
   # Access and error log files.
-  access_log /var/log/nginx/<%= node[:myblog][:static] %>-access.log;
-  error_log /var/log/nginx/<%= node[:myblog][:static] %>-error.log;
- 
-  # Custom error page.
-  # error_page 404 maintenance.html;
-  # error_page 500 502 503 504 maintenance.html;
-  
-  # location /maintenance.html {
-  #  root /var/www;
-  # }
+  access_log /var/log/nginx/<%= node[:myblog][:static][:hostname] %>-access.log;
+  error_log /var/log/nginx/<%= node[:myblog][:static][:hostname] %>-error.log;
+
+  set $root_dir /var/www/<%= node[:myblog][:static][:hostname] %>/current/public/;
+
+  # Firefox and IE9 require the fonts to be served from the same domain
+  # This is the workaround but doesn't work for s3
+  location ~* \.(eot|otf|ttf|woff)$ {
+    root $root_dir;
+    access_log off;
+    expires max;
+    add_header Pragma public;
+    add_header Access-Control-Allow-Origin *;
+  }
 
   location / {
-    root /var/www/<%= node[:myblog][:static] %>/current/public/;
+    root $root_dir;
     access_log off;
     expires max;
     add_header Pragma public;

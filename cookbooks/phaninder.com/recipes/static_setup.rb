@@ -23,7 +23,7 @@ group "www-data" do
   append true
 end
 
-directory "#{node[:myblog][:static_root]}/#{node[:myblog][:static]}" do
+directory "#{node[:myblog][:static][:root_dir]}/#{node[:myblog][:static][:hostname]}" do
 	owner "nginx"
   group "www-data"
   mode  00674
@@ -33,19 +33,19 @@ end
 
 bash "make_static_root_executable" do
   user "root"
-  cwd node[:myblog][:static_root]
+  cwd node[:myblog][:static][:root_dir]
   code <<-EOH
     chmod a+x *
   EOH
 end
 
 ### set_site definition
-set_site node[:myblog][:static] do
+set_site node[:myblog][:static][:hostname] do
   enable true
 end
 
 ### set /etc/hosts
 hostsfile_entry node['phaninder.com'][:A_record] do
-  hostname  node[:myblog][:static]
+  hostname  node[:myblog][:static][:hostname]
   action    :append
 end
