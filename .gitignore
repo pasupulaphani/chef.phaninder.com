@@ -54,6 +54,8 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
+berks-cookbooks
+
 # no databags
 data_bags
 
