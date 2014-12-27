@@ -4,7 +4,7 @@
 
 # Ruby
 .rake_test_cache
-.rvmrc
+#.rvmrc
 .rbenv-version
 
 # Vagrant

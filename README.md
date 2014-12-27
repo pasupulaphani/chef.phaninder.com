@@ -1,5 +1,7 @@
-chef_server repo for phaninder.com
+chef.phaninder.com
 ===============
+> Infrastructure as code for phaninder.com
+
 (It has reached a stage where I've to move a lot my cookbooks to private repo for security reason)
 I still try to keep this public repo uptodate
 
@@ -7,28 +9,35 @@ My chef server
 -------------------
 This is a central workspace to place cookbooks, roles, ......
 
+## Getting started
+Cookbook versioning and dependencies are managed by berkshelf
 
-Knife Configuration
--------------------
-Knife is the [command line interface](http://docs.opscode.com/knife.html) for Chef. 
-Can be found under .chef/knife.rb.
+To install Berksfile dependencies do ```berks install```
 
-New version of Knife has extendec its support for chef-solo. See my [chef_solo repo](https://github.com/pasupulaphani/chef_solo)
 
-Cookbooks
----------
-Nginx
-    -- dependencies:
-    apt  bluepill  build-essential  chefignore  nginx  ohai  rsyslog  runit  yum
-    
-Node
-    -- dependencies:
-    
+## Updating cookbooks
 
-Roles
------
-Roles can be found in chef_server/roles directory.
+To update cookbooks and berkslock do ```berks vendor```
 
-webserver
-    proxy server for my app
+## Uploading cookbooks
+To upload berks cookbooks try this 
+```
+knife upload berks-cookbooks/
+```
+Cookbooks from folder cookbooks can be uploaded via
+
+```
+kinfe cookbook upload --all
+```
+(beaware of false positives)
+
+
+## Knife Configuration
+
+Knife is the [command line interface](http://docs.opscode.com/knife.html) for Chef.
+
+Configuration can be found under .chef/knife.rb.
+
+New version of Knife has extend its support for chef-solo. See my [chef_solo repo](https://github.com/pasupulaphani/chef_solo)
+
 

@@ -5,3 +5,4 @@ site :opscode
 cookbook "nginx"
 cookbook "nodejs"
 cookbook "hostsfile"
+cookbook "newrelic"

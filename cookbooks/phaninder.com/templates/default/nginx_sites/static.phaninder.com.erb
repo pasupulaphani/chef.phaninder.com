@@ -11,7 +11,7 @@ server {
   access_log /var/log/nginx/<%= node[:myblog][:static][:hostname] %>-access.log;
   error_log /var/log/nginx/<%= node[:myblog][:static][:hostname] %>-error.log;
 
-  set $root_dir /var/www/<%= node[:myblog][:static][:hostname] %>/current/public/;
+  set $root_dir /var/www/<%= node[:myblog][:static][:hostname] %>/current/dist/;
 
   # Firefox and IE9 require the fonts to be served from the same domain
   # This is the workaround but doesn't work for s3

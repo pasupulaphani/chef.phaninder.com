@@ -25,22 +25,18 @@ default[:myblog] = {
 	:main  => {
 		:hostname    =>  'phaninder.com',
 		:aliases     =>  ['www.phaninder.com'],
-		:proxy_pass  =>  'http://phaninder.eu01.aws.af.cm/'
+		:proxy_pass  =>  'http://secondary.phaninder.com'
 	},
 	:secondary => {
 		:proxy_pass  =>  'http://secondary.phaninder.com'
 	},
 	:static => {
 		:hostname    =>  'static.phaninder.com',
-		:root_dir    =>  '/var/www/',
-		:proxy_pass  =>  'http://phaninder.eu01.aws.af.cm/'
+		:root_dir    =>  '/var/www/'
 	},
 	:backup => {
 		:hostname    =>  'backup.phaninder.com',
 		:proxy_pass  =>  'http://backup-phaninder.eu01.aws.af.cm/'
-	},
-	:resume => {
-		:proxy_pass  =>  'http://resume.phaninder.com'
 	}
 }
 

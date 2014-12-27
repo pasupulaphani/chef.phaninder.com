@@ -3,7 +3,7 @@ description "reverse proxy for my app"
 run_list "recipe[nginx]"
 override_attributes({
   :nginx => {
-    :version           => "1.4.4",
+    :version           => "1.6.2",
     :repo_source       => "nginx",
     :status            => { :port => "8090" },
     :default_site_enabled => false,

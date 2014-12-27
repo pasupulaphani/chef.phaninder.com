@@ -40,11 +40,6 @@ server {
     }
   <% end %>
 
-  location /resume {
-    # Reverse proxy
-    proxy_pass <%= node[:myblog][:resume][:proxy_pass] %>;
-  }
-
   location / {
     # Reverse proxy
     proxy_pass <%= node[:myblog][:main][:proxy_pass] %>;
