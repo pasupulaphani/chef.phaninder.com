@@ -1,6 +1,10 @@
 phaninder.com CHANGELOG
 =======================
 
+1.4.3
+-----
+- [phani] - new site, angular html5mode, modrewite to index
+
 1.3.0
 -----
 - [phani] - clean up

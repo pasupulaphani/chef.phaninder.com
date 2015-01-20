@@ -24,8 +24,7 @@ end
 default[:myblog] = { 
 	:main  => {
 		:hostname    =>  'phaninder.com',
-		:aliases     =>  ['www.phaninder.com'],
-		:proxy_pass  =>  'http://secondary.phaninder.com'
+		:aliases     =>  ['www.phaninder.com']
 	},
 	:secondary => {
 		:proxy_pass  =>  'http://secondary.phaninder.com'

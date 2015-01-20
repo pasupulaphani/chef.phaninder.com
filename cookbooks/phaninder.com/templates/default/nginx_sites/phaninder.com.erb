@@ -34,15 +34,18 @@ server {
   # that proxy_pass cannot be used in location regex, if and few nginx control statements
   <% node[:myblog][:static_route_main].each do |file_name| %>
     location /<%= file_name %> {
-      proxy_pass http://<%= node[:myblog][:static][:hostname] %>/<%= file_name %>;
+      proxy_pass http://<%= node[:myblog][:static][:hostname] %>/dist/<%= file_name %>;
       access_log off;
       expires max;
     }
   <% end %>
 
+  set $root_dir /var/www/<%= node[:myblog][:static][:hostname] %>/current/dist/;
+
   location / {
-    # Reverse proxy
-    proxy_pass <%= node[:myblog][:main][:proxy_pass] %>;
+
+    root $root_dir;
+    try_files $uri /index.html;
 
     # take care of errors
     proxy_intercept_errors on;
