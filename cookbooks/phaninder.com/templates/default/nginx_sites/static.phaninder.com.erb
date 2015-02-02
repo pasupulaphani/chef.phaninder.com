@@ -23,6 +23,14 @@ server {
     add_header Access-Control-Allow-Origin *;
   }
 
+  location /phaninder.vcf {
+    root $root_dir;
+    add_header content-disposition 'attachment;';
+    add_header content-type 'text/x-vcard; charset=utf-8;';
+    access_log off;
+    expires max;
+  }
+
   location / {
     root $root_dir;
     access_log off;

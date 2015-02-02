@@ -35,7 +35,10 @@ default[:myblog] = {
 	},
 	:backup => {
 		:hostname    =>  'backup.phaninder.com',
-		:proxy_pass  =>  'http://backup-phaninder.eu01.aws.af.cm/'
+		:proxy_pass  =>  ''
+	}
+	:seo => {
+		:proxy_pass  =>  '127.0.0.1:8081'
 	}
 }
 

@@ -15,13 +15,18 @@ proxy_set_header X-Forwarded-Proto $scheme;
 proxy_set_header Connection        "";
 
 server {
+  server_name  <% node[:myblog][:main][:aliases].each do |a| %> <%= a %> <% end %>;
+  return 301 $scheme://<%= node[:myblog][:main][:hostname] %>$request_uri;
+}
+
+server {
   listen 80;
   listen [::]:80 default_server ipv6only=on;
  
   # Timeout for closing keep-alive connections.
   keepalive_timeout 10;
 
-  server_name <%= node[:myblog][:main][:hostname] %> <% node[:myblog][:main][:aliases].each do |a| %> <%= a %> <% end %>;
+  server_name <%= node[:myblog][:main][:hostname] %>;
   
   # Max upload size.
   # client_max_body_size 16M;
@@ -34,11 +39,41 @@ server {
   # that proxy_pass cannot be used in location regex, if and few nginx control statements
   <% node[:myblog][:static_route_main].each do |file_name| %>
     location /<%= file_name %> {
-      proxy_pass http://<%= node[:myblog][:static][:hostname] %>/dist/<%= file_name %>;
+      proxy_pass http://<%= node[:myblog][:static][:hostname] %>/<%= file_name %>;
       access_log off;
       expires max;
     }
   <% end %>
+
+
+  /////////////// SEO stuff ////////////////
+  set $snapshot 0;
+
+  #rewrite snapshot requests to the ajaxsnapshots location
+  if ($args ~* "(^|.*&)_escaped_fragment_=.*") {
+    set $snapshot 1;
+  }
+
+  #also serve snapshots to social sharing bots
+  if ($http_user_agent ~* "FacebookExternalHit|LinkedInBot|TwitterBot|Baiduspider") {
+    set $snapshot 1;
+  }
+
+  #excluded suffixes (assumed static). Broken into two conditionals for readability
+  if ($uri ~ "\.(jpe?g|png|svg|gif|ico|tiff?|css|less|js|doc|zip|rar|exe|iso|dmg)") {
+    set $snapshot 0;
+  }
+  if ($uri ~ "\.(dat|ppt|psd|pdf|xls|mp3|mp4|m4a|wav|avi|mpe?g|swf|flv|mkv|torrent)") {
+    set $snapshot 0;
+  }
+  if ( $snapshot = 1) {
+        rewrite ^ /seo-proxy last;
+  }
+
+  location ^~ /seo-proxy {
+        proxy_pass <%= node[:myblog][:seo][:proxy_pass] %>/$scheme://$host:$server_port$request_uri;
+  }
+  //////////////
 
   set $root_dir /var/www/<%= node[:myblog][:static][:hostname] %>/current/dist/;
 

@@ -40,4 +40,16 @@ Configuration can be found under .chef/knife.rb.
 
 New version of Knife has extend its support for chef-solo. See my [chef_solo repo](https://github.com/pasupulaphani/chef_solo)
 
+## Troubleshoot
+
+Command:
+
+    kinfe cookbook upload --all
+Error:
+
+    rubygems/dependency.rb:298:in `to_specs': Could not find 'chef' (>= 0) among 47 total gem(s) (Gem::LoadError)
+Fix:
+
+    rvm reset
+
 
